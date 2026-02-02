@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas demo</title>
+  </head>
+  <body>
+    <div
+      style="
+        margin: 12px 0;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        flex-wrap: wrap;
+      "
+    >
+      <div style="display: flex; gap: 10px; align-items: center">
+        <label for="colorPicker">Brush color:</label>
+        <input id="colorPicker" type="color" value="#000000" />
+        <span id="colorValue">#000000</span>
+      </div>
+
+      <fieldset
+        style="border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px"
+      >
+        <legend style="padding: 0 6px">Brush size</legend>
+
+        <div style="display: flex; gap: 10px; align-items: center">
+          <!-- Paint-like preset sizes -->
+          <label
+            style="
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              cursor: pointer;
+            "
+          >
+            <input type="radio" name="brushSize" value="2" />
+            <span
+              style="
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #888;
+                border-radius: 50%;
+                background: #000;
+                transform: scale(0.35);
+              "
+            ></span>
+            1
+          </label>
+
+          <label
+            style="
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              cursor: pointer;
+            "
+          >
+            <input type="radio" name="brushSize" value="4" />
+            <span
+              style="
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #888;
+                border-radius: 50%;
+                background: #000;
+                transform: scale(0.55);
+              "
+            ></span>
+            2
+          </label>
+
+          <label
+            style="
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              cursor: pointer;
+            "
+          >
+            <input type="radio" name="brushSize" value="7" checked />
+            <span
+              style="
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #888;
+                border-radius: 50%;
+                background: #000;
+                transform: scale(0.75);
+              "
+            ></span>
+            3
+          </label>
+
+          <label
+            style="
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              cursor: pointer;
+            "
+          >
+            <input type="radio" name="brushSize" value="10" />
+            <span
+              style="
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #888;
+                border-radius: 50%;
+                background: #000;
+                transform: scale(0.95);
+              "
+            ></span>
+            4
+          </label>
+
+          <label
+            style="
+              display: flex;
+              gap: 6px;
+              align-items: center;
+              cursor: pointer;
+            "
+          >
+            <input type="radio" name="brushSize" value="14" />
+            <span
+              style="
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #888;
+                border-radius: 50%;
+                background: #000;
+                transform: scale(1.15);
+              "
+            ></span>
+            5
+          </label>
+        </div>
+      </fieldset>
+
+      <span id="sizeValue" style="color: #444">Size: 2px</span>
+
+      <div id="toolbar" style="display: flex; gap: 8px; margin-bottom: 12px">
+        <button data-tool="pen">Pen</button>
+        <button data-tool="select">Select/Move</button>
+        <button data-tool="rect">Rectangle</button>
+        <button data-tool="square">Square</button>
+        <button data-tool="circle">Circle</button>
+        <button data-tool="triangle">Triangle</button>
+      </div>
+    </div>
+
+    <canvas
+      id="canvas"
+      width="1000"
+      height="490"
+      style="border: 1px solid black"
+    >
+    </canvas>
+    <button id="clear">Clear</button>
+    <div></div>
+    <script type="module" src="./dist/index.js"></script>
+  </body>
+</html>

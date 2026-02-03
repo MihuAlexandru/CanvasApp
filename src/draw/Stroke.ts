@@ -1,9 +1,7 @@
-import type { Point } from "../types.js";
+import type { Point, StrokeMode } from "../types.js";
 import type { Drawable } from "./Drawable.js";
 
-export type StrokeMode = "draw" | "erase";
-
-export class StrokeDrawable implements Drawable {
+export class Stroke implements Drawable {
   public points: Point[] = [];
 
   constructor(

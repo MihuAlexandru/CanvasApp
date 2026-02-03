@@ -1,5 +1,5 @@
 import { Point } from "../types";
-import type { Drawable } from "../draw/Drawable.js";
+import type { Drawable } from "./Drawable.js";
 
 export abstract class Figure implements Drawable {
   constructor(

@@ -1,4 +1,4 @@
-import { Figure } from "./Figure.js";
+import { Figure } from "../Figure.js";
 export class RectFigure extends Figure {
     draw(ctx) {
         const x = Math.min(this.start.x, this.end.x);

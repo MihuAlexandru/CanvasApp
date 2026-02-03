@@ -1,10 +1,10 @@
 import type { Tool, Point } from "./types.js";
 
 import { InfoUI } from "./ui/InfoUI.js";
-import { Figure } from "./figures/Figure.js";
-import { EllipseFigure } from "./figures/EllipseFigure.js";
-import { RectFigure } from "./figures/RectFigure.js";
-import { LineFigure } from "./figures/LineFigure.js";
+import { Figure } from "./draw/Figure.js";
+import { EllipseFigure } from "./draw/figures/EllipseFigure.js";
+import { RectFigure } from "./draw/figures/RectFigure.js";
+import { LineFigure } from "./draw/figures/LineFigure.js";
 import { CanvasRenderer } from "./canvas/CanvasRenderer.js";
 import { CanvasInput } from "./canvas/CanvasInput.js";
 import { BrushUI } from "./ui/BrushUI.js";
@@ -12,7 +12,7 @@ import { ToolUI } from "./ui/ToolUI.js";
 import { ClearUI } from "./ui/ClearUI.js";
 
 import type { Drawable } from "./draw/Drawable.js";
-import { StrokeDrawable } from "./draw/StrokeDrawable.js";
+import { Stroke } from "./draw/Stroke.js";
 
 export class DrawingApp {
   private canvas: HTMLCanvasElement;
@@ -20,7 +20,7 @@ export class DrawingApp {
 
   private tool: Tool = "brush";
   private drawables: Drawable[] = [];
-  private currentStroke: StrokeDrawable | null = null;
+  private currentStroke: Stroke | null = null;
   private currentFigure: Figure | null = null;
 
   private brushColor = "#000000";
@@ -98,7 +98,7 @@ export class DrawingApp {
       const mode = this.tool === "eraser" ? "erase" : "draw";
       const width = this.brushWidth;
 
-      this.currentStroke = new StrokeDrawable(this.brushColor, width, mode);
+      this.currentStroke = new Stroke(this.brushColor, width, mode);
       this.currentStroke.addPoint(p);
       this.drawables.push(this.currentStroke);
     } else {

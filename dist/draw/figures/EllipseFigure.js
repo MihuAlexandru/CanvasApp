@@ -1,4 +1,4 @@
-import { Figure } from "./Figure.js";
+import { Figure } from "../Figure.js";
 export class EllipseFigure extends Figure {
     draw(ctx) {
         const cx = (this.start.x + this.end.x) / 2;

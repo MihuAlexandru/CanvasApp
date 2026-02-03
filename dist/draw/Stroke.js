@@ -1,4 +1,4 @@
-export class StrokeDrawable {
+export class Stroke {
     constructor(color, width, mode = "draw") {
         this.color = color;
         this.width = width;
@@ -16,9 +16,8 @@ export class StrokeDrawable {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         if (this.mode === "erase") {
-            // Erase pixels already drawn (including shapes) as long as those pixels were drawn BEFORE this stroke in history.
             ctx.globalCompositeOperation = "destination-out";
-            ctx.strokeStyle = "rgba(0,0,0,1)"; // color irrelevant in destination-out
+            ctx.strokeStyle = "rgba(0,0,0,1)";
         }
         else {
             ctx.globalCompositeOperation = "source-over";
@@ -34,4 +33,4 @@ export class StrokeDrawable {
         ctx.restore();
     }
 }
-//# sourceMappingURL=StrokeDrawable.js.map
+//# sourceMappingURL=Stroke.js.map

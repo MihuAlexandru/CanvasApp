@@ -1,13 +1,13 @@
 import { InfoUI } from "./ui/InfoUI.js";
-import { EllipseFigure } from "./figures/EllipseFigure.js";
-import { RectFigure } from "./figures/RectFigure.js";
-import { LineFigure } from "./figures/LineFigure.js";
+import { EllipseFigure } from "./draw/figures/EllipseFigure.js";
+import { RectFigure } from "./draw/figures/RectFigure.js";
+import { LineFigure } from "./draw/figures/LineFigure.js";
 import { CanvasRenderer } from "./canvas/CanvasRenderer.js";
 import { CanvasInput } from "./canvas/CanvasInput.js";
 import { BrushUI } from "./ui/BrushUI.js";
 import { ToolUI } from "./ui/ToolUI.js";
 import { ClearUI } from "./ui/ClearUI.js";
-import { StrokeDrawable } from "./draw/StrokeDrawable.js";
+import { Stroke } from "./draw/Stroke.js";
 export class DrawingApp {
     constructor() {
         this.tool = "brush";
@@ -62,7 +62,7 @@ export class DrawingApp {
         if (this.tool === "brush" || this.tool === "eraser") {
             const mode = this.tool === "eraser" ? "erase" : "draw";
             const width = this.brushWidth;
-            this.currentStroke = new StrokeDrawable(this.brushColor, width, mode);
+            this.currentStroke = new Stroke(this.brushColor, width, mode);
             this.currentStroke.addPoint(p);
             this.drawables.push(this.currentStroke);
         }

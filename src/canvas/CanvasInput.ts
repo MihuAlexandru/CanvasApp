@@ -1,10 +1,4 @@
-import type { Point } from "../types.js";
-
-type Handlers = {
-  onDown(p: Point, e: PointerEvent): void;
-  onMove(p: Point, e: PointerEvent): void;
-  onUp(e: PointerEvent): void;
-};
+import type { Point, Handlers } from "../types.js";
 
 export class CanvasInput {
   constructor(

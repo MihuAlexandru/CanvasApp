@@ -1,10 +1,6 @@
-type Point = { x: number; y: number };
+import type { Stroke } from "./types";
 
-type Stroke = {
-  color: string;
-  width: number;
-  points: Point[];
-};
+import { InfoUI } from "./InfoUI.js";
 
 class DrawingApp {
   private canvas: HTMLCanvasElement;
@@ -16,6 +12,8 @@ class DrawingApp {
 
   private brushColor = "#000000";
   private brushWidth = 3;
+
+  private infoUI: InfoUI;
 
   constructor() {
     const canvasEl = document.getElementById("canvas");
@@ -42,6 +40,7 @@ class DrawingApp {
     this.createColorPickerEvents();
     this.createBrushSizeEvents();
     this.redraw();
+    this.infoUI = new InfoUI("#legenda .uiInfo", this.canvas);
   }
 
   private createUserEvents() {

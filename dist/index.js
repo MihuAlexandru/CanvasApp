@@ -1,4 +1,4 @@
-"use strict";
+import { InfoUI } from "./InfoUI.js";
 class DrawingApp {
     constructor() {
         this.paint = false;
@@ -57,6 +57,7 @@ class DrawingApp {
         this.createColorPickerEvents();
         this.createBrushSizeEvents();
         this.redraw();
+        this.infoUI = new InfoUI("#legenda .uiInfo", this.canvas);
     }
     createUserEvents() {
         var _a;

@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Canvas demo</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body style="height: 2000px; width: 3000px">
     <div
       style="
         margin: 12px 0;
@@ -165,7 +166,10 @@
     >
     </canvas>
     <button id="clear">Clear</button>
-    <div></div>
+    <fieldset style="padding: 8px 12px; border-radius: 8px" id="legenda">
+      <legend style="padding: 0 6px">UI INFO</legend>
+      <div class="uiInfo"></div>
+    </fieldset>
     <script type="module" src="./dist/index.js"></script>
   </body>
 </html>

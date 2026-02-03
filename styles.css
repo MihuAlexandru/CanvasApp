@@ -1,0 +1,9 @@
+#legenda {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  height: 200px;
+  border: 1px solid black;
+  background-color: antiquewhite;
+}

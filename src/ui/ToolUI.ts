@@ -22,5 +22,8 @@ export class ToolUI {
     document
       .getElementById("toolEraser")
       ?.addEventListener("click", () => this.setTool("eraser"));
+    document
+      .getElementById("toolFill")
+      ?.addEventListener("click", () => this.setTool("fill"));
   }
 }

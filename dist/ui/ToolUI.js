@@ -4,7 +4,7 @@ export class ToolUI {
         this.setTool = setTool;
     }
     init() {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c, _d, _e, _f;
         (_a = document
             .getElementById("toolBrush")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => this.setTool("brush"));
         (_b = document
@@ -15,6 +15,8 @@ export class ToolUI {
             .getElementById("toolLine")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => this.setTool("line"));
         (_e = document
             .getElementById("toolEraser")) === null || _e === void 0 ? void 0 : _e.addEventListener("click", () => this.setTool("eraser"));
+        (_f = document
+            .getElementById("toolFill")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => this.setTool("fill"));
     }
 }
 //# sourceMappingURL=ToolUI.js.map

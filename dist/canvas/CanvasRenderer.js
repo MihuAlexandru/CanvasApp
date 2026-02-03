@@ -9,7 +9,6 @@ export class CanvasRenderer {
     render(strokes, figures, previewFigure) {
         const ctx = this.ctx;
         this.clear();
-        // strokes
         for (const stroke of strokes) {
             const pts = stroke.points;
             if (pts.length === 0)

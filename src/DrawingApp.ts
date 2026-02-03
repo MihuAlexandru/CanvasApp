@@ -67,7 +67,7 @@ export class DrawingApp {
 
     new ClearUI(() => this.clearCanvas()).init();
 
-    this.infoUI = new InfoUI("#legenda .uiInfo", this.canvas);
+    this.infoUI = new InfoUI("#legenda .ui-info", this.canvas);
     this.redraw();
   }
 

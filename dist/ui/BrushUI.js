@@ -6,8 +6,8 @@ export class BrushUI {
     }
     init() {
         var _a;
-        const picker = document.getElementById("colorPicker");
-        const valueLabel = document.getElementById("colorValue");
+        const picker = document.getElementById("color-picker");
+        const valueLabel = document.getElementById("color-value");
         if (picker instanceof HTMLInputElement) {
             this.setColor(picker.value);
             if (valueLabel)
@@ -18,8 +18,8 @@ export class BrushUI {
                     valueLabel.textContent = picker.value;
             });
         }
-        const sizeValue = document.getElementById("sizeValue");
-        const radios = document.querySelectorAll('input[name="brushSize"]');
+        const sizeValue = document.getElementById("size-value");
+        const radios = document.querySelectorAll('input[name="brush-size"]');
         if (!radios.length)
             return;
         const checked = (_a = Array.from(radios).find((r) => r.checked)) !== null && _a !== void 0 ? _a : radios[0];

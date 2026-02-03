@@ -6,149 +6,45 @@
     <title>Canvas demo</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body style="height: 2000px; width: 3000px">
-    <div
-      style="
-        margin: 12px 0;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        flex-wrap: wrap;
-      "
-    >
-      <div style="display: flex; gap: 10px; align-items: center">
-        <label for="colorPicker">Brush color:</label>
-        <input id="colorPicker" type="color" value="#000000" />
-        <span id="colorValue">#000000</span>
-      </div>
-
-      <fieldset
-        style="border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px"
-      >
-        <legend style="padding: 0 6px">Brush size</legend>
-
-        <div style="display: flex; gap: 10px; align-items: center">
-          <!-- Paint-like preset sizes -->
-          <label
-            style="
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              cursor: pointer;
-            "
-          >
-            <input type="radio" name="brushSize" value="2" />
-            <span
-              style="
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #888;
-                border-radius: 50%;
-                background: #000;
-                transform: scale(0.35);
-              "
-            ></span>
+  <body>
+    <div class="top-row">
+      <fieldset class="color-picker">
+        <legend>Brush color:</legend>
+        <input id="color-picker" type="color" value="#000000" />
+        <span id="color-value">#000000</span>
+      </fieldset>
+      <fieldset class="brush-picker">
+        <legend>Brush size</legend>
+        <div class="brush-picker-radios">
+          <label>
+            <input type="radio" name="brush-size" value="2" />
+            <span style="transform: scale(0.35)"></span>
             1
           </label>
-
-          <label
-            style="
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              cursor: pointer;
-            "
-          >
-            <input type="radio" name="brushSize" value="4" />
-            <span
-              style="
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #888;
-                border-radius: 50%;
-                background: #000;
-                transform: scale(0.55);
-              "
-            ></span>
+          <label>
+            <input type="radio" name="brush-size" value="4" />
+            <span style="transform: scale(0.55)"></span>
             2
           </label>
-
-          <label
-            style="
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              cursor: pointer;
-            "
-          >
-            <input type="radio" name="brushSize" value="7" checked />
-            <span
-              style="
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #888;
-                border-radius: 50%;
-                background: #000;
-                transform: scale(0.75);
-              "
-            ></span>
+          <label>
+            <input type="radio" name="brush-size" value="7" checked />
+            <span style="transform: scale(0.75)"></span>
             3
           </label>
-
-          <label
-            style="
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              cursor: pointer;
-            "
-          >
-            <input type="radio" name="brushSize" value="10" />
-            <span
-              style="
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #888;
-                border-radius: 50%;
-                background: #000;
-                transform: scale(0.95);
-              "
-            ></span>
+          <label>
+            <input type="radio" name="brush-size" value="10" />
+            <span style="transform: scale(0.95)"></span>
             4
           </label>
-
-          <label
-            style="
-              display: flex;
-              gap: 6px;
-              align-items: center;
-              cursor: pointer;
-            "
-          >
-            <input type="radio" name="brushSize" value="14" />
-            <span
-              style="
-                display: inline-block;
-                width: 18px;
-                height: 18px;
-                border: 1px solid #888;
-                border-radius: 50%;
-                background: #000;
-                transform: scale(1.15);
-              "
-            ></span>
+          <label>
+            <input type="radio" name="brush-size" value="14" />
+            <span style="transform: scale(1.15)"></span>
             5
           </label>
         </div>
       </fieldset>
-
-      <span id="sizeValue" style="color: #444">Size: 2px</span>
-
-      <div id="toolbar" style="display: flex; gap: 8px; margin-bottom: 12px">
+      <span id="size-value">Size: 2px</span>
+      <div id="toolbar">
         <button id="toolBrush">Brush</button>
         <button id="toolRect">Rectangle</button>
         <button id="toolEllipse">Circle/Ellipse</button>
@@ -156,18 +52,11 @@
         <button id="toolEraser">Eraser</button>
       </div>
     </div>
-
-    <canvas
-      id="canvas"
-      width="1000"
-      height="490"
-      style="border: 1px solid black"
-    >
-    </canvas>
+    <canvas id="canvas" width="1000" height="490"></canvas>
     <button id="clear">Clear</button>
-    <fieldset style="padding: 8px 12px; border-radius: 8px" id="legenda">
-      <legend style="padding: 0 6px">UI INFO</legend>
-      <div class="uiInfo"></div>
+    <fieldset id="legenda">
+      <legend>UI INFO</legend>
+      <div class="ui-info"></div>
     </fieldset>
     <script type="module" src="./dist/index.js"></script>
   </body>

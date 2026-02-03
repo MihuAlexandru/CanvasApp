@@ -6,8 +6,8 @@ export class BrushUI {
   ) {}
 
   init() {
-    const picker = document.getElementById("colorPicker");
-    const valueLabel = document.getElementById("colorValue");
+    const picker = document.getElementById("color-picker");
+    const valueLabel = document.getElementById("color-value");
     if (picker instanceof HTMLInputElement) {
       this.setColor(picker.value);
       if (valueLabel) valueLabel.textContent = picker.value;
@@ -17,9 +17,9 @@ export class BrushUI {
       });
     }
 
-    const sizeValue = document.getElementById("sizeValue");
+    const sizeValue = document.getElementById("size-value");
     const radios = document.querySelectorAll<HTMLInputElement>(
-      'input[name="brushSize"]',
+      'input[name="brush-size"]',
     );
     if (!radios.length) return;
 

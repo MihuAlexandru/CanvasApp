@@ -7,12 +7,12 @@ import { CanvasInput } from "./canvas/CanvasInput.js";
 import { BrushUI } from "./ui/BrushUI.js";
 import { ToolUI } from "./ui/ToolUI.js";
 import { ClearUI } from "./ui/ClearUI.js";
+import { StrokeDrawable } from "./draw/StrokeDrawable.js";
 export class DrawingApp {
     constructor() {
-        this.strokes = [];
-        this.currentStroke = null;
         this.tool = "brush";
-        this.figures = [];
+        this.drawables = [];
+        this.currentStroke = null;
         this.currentFigure = null;
         this.brushColor = "#000000";
         this.brushWidth = 3;
@@ -50,34 +50,33 @@ export class DrawingApp {
         this.ctx.lineWidth = w;
     }
     redraw() {
-        this.renderer.render(this.strokes, this.figures, this.currentFigure);
+        this.renderer.render(this.drawables);
     }
     clearCanvas() {
-        this.strokes = [];
+        this.drawables = [];
         this.currentStroke = null;
-        this.figures = [];
         this.currentFigure = null;
         this.redraw();
     }
     onDown(p) {
-        if (this.tool === "brush") {
-            this.currentStroke = {
-                color: this.brushColor,
-                width: this.brushWidth,
-                points: [p],
-            };
-            this.strokes.push(this.currentStroke);
+        if (this.tool === "brush" || this.tool === "eraser") {
+            const mode = this.tool === "eraser" ? "erase" : "draw";
+            const width = this.brushWidth;
+            this.currentStroke = new StrokeDrawable(this.brushColor, width, mode);
+            this.currentStroke.addPoint(p);
+            this.drawables.push(this.currentStroke);
         }
         else {
             this.currentFigure = this.createFigure(this.tool, p, p);
+            this.drawables.push(this.currentFigure);
         }
         this.redraw();
     }
     onMove(p) {
-        if (this.tool === "brush") {
+        if (this.tool === "brush" || this.tool === "eraser") {
             if (!this.currentStroke)
                 return;
-            this.currentStroke.points.push(p);
+            this.currentStroke.addPoint(p);
         }
         else {
             if (!this.currentFigure)
@@ -88,10 +87,7 @@ export class DrawingApp {
     }
     onUp() {
         this.currentStroke = null;
-        if (this.currentFigure) {
-            this.figures.push(this.currentFigure);
-            this.currentFigure = null;
-        }
+        this.currentFigure = null;
         this.redraw();
     }
     createFigure(tool, start, end) {

@@ -1,6 +1,7 @@
 import { Point } from "../types";
+import type { Drawable } from "../draw/Drawable.js";
 
-export abstract class Figure {
+export abstract class Figure implements Drawable {
   constructor(
     public color: string,
     public width: number,

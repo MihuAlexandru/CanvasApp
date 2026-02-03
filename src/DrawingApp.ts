@@ -1,4 +1,4 @@
-import type { Stroke, Tool, Point } from "./types.js";
+import type { Tool, Point } from "./types.js";
 
 import { InfoUI } from "./ui/InfoUI.js";
 import { Figure } from "./figures/Figure.js";
@@ -11,15 +11,16 @@ import { BrushUI } from "./ui/BrushUI.js";
 import { ToolUI } from "./ui/ToolUI.js";
 import { ClearUI } from "./ui/ClearUI.js";
 
+import type { Drawable } from "./draw/Drawable.js";
+import { StrokeDrawable } from "./draw/StrokeDrawable.js";
+
 export class DrawingApp {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
-  private strokes: Stroke[] = [];
-  private currentStroke: Stroke | null = null;
-
   private tool: Tool = "brush";
-  private figures: Figure[] = [];
+  private drawables: Drawable[] = [];
+  private currentStroke: StrokeDrawable | null = null;
   private currentFigure: Figure | null = null;
 
   private brushColor = "#000000";
@@ -82,35 +83,36 @@ export class DrawingApp {
   }
 
   private redraw() {
-    this.renderer.render(this.strokes, this.figures, this.currentFigure);
+    this.renderer.render(this.drawables);
   }
 
   private clearCanvas() {
-    this.strokes = [];
+    this.drawables = [];
     this.currentStroke = null;
-    this.figures = [];
     this.currentFigure = null;
     this.redraw();
   }
 
   private onDown(p: Point) {
-    if (this.tool === "brush") {
-      this.currentStroke = {
-        color: this.brushColor,
-        width: this.brushWidth,
-        points: [p],
-      };
-      this.strokes.push(this.currentStroke);
+    if (this.tool === "brush" || this.tool === "eraser") {
+      const mode = this.tool === "eraser" ? "erase" : "draw";
+      const width = this.brushWidth;
+
+      this.currentStroke = new StrokeDrawable(this.brushColor, width, mode);
+      this.currentStroke.addPoint(p);
+      this.drawables.push(this.currentStroke);
     } else {
       this.currentFigure = this.createFigure(this.tool, p, p);
+      this.drawables.push(this.currentFigure);
     }
+
     this.redraw();
   }
 
   private onMove(p: Point) {
-    if (this.tool === "brush") {
+    if (this.tool === "brush" || this.tool === "eraser") {
       if (!this.currentStroke) return;
-      this.currentStroke.points.push(p);
+      this.currentStroke.addPoint(p);
     } else {
       if (!this.currentFigure) return;
       this.currentFigure.updateEnd(p);
@@ -120,16 +122,12 @@ export class DrawingApp {
 
   private onUp() {
     this.currentStroke = null;
-
-    if (this.currentFigure) {
-      this.figures.push(this.currentFigure);
-      this.currentFigure = null;
-    }
+    this.currentFigure = null;
     this.redraw();
   }
 
   private createFigure(
-    tool: Exclude<Tool, "brush">,
+    tool: Exclude<Tool, "brush" | "eraser">,
     start: Point,
     end: Point,
   ): Figure {

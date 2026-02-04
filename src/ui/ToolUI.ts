@@ -1,29 +1,44 @@
 import type { Tool } from "../types.js";
 
 export class ToolUI {
+  private buttons: HTMLButtonElement[] = [];
+
   constructor(
     private getTool: () => Tool,
     private setTool: (t: Tool) => void,
   ) {}
 
   init() {
-    document
-      .getElementById("toolBrush")
-      ?.addEventListener("click", () => this.setTool("brush"));
-    document
-      .getElementById("toolRect")
-      ?.addEventListener("click", () => this.setTool("rect"));
-    document
-      .getElementById("toolEllipse")
-      ?.addEventListener("click", () => this.setTool("ellipse"));
-    document
-      .getElementById("toolLine")
-      ?.addEventListener("click", () => this.setTool("line"));
-    document
-      .getElementById("toolEraser")
-      ?.addEventListener("click", () => this.setTool("eraser"));
-    document
-      .getElementById("toolFill")
-      ?.addEventListener("click", () => this.setTool("fill"));
+    const toolMap: Record<string, Tool> = {
+      toolBrush: "brush",
+      toolRect: "rect",
+      toolEllipse: "ellipse",
+      toolLine: "line",
+      toolEraser: "eraser",
+      toolFill: "fill",
+    };
+
+    this.buttons = Object.keys(toolMap)
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLButtonElement => el instanceof HTMLButtonElement);
+
+    for (const btn of this.buttons) {
+      const tool = toolMap[btn.id];
+      if (!tool) continue;
+      btn.addEventListener("click", () => {
+        this.setTool(tool);
+        this.updateActiveButton(btn);
+      });
+    }
+
+    const initial = document.getElementById("toolBrush");
+    if (initial instanceof HTMLButtonElement) {
+      this.updateActiveButton(initial);
+    }
+  }
+
+  private updateActiveButton(activeBtn: HTMLButtonElement) {
+    this.buttons.forEach((btn) => btn.classList.remove("active-tool"));
+    activeBtn.classList.add("active-tool");
   }
 }

@@ -2,21 +2,37 @@ export class ToolUI {
     constructor(getTool, setTool) {
         this.getTool = getTool;
         this.setTool = setTool;
+        this.buttons = [];
     }
     init() {
-        var _a, _b, _c, _d, _e, _f;
-        (_a = document
-            .getElementById("toolBrush")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => this.setTool("brush"));
-        (_b = document
-            .getElementById("toolRect")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => this.setTool("rect"));
-        (_c = document
-            .getElementById("toolEllipse")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => this.setTool("ellipse"));
-        (_d = document
-            .getElementById("toolLine")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => this.setTool("line"));
-        (_e = document
-            .getElementById("toolEraser")) === null || _e === void 0 ? void 0 : _e.addEventListener("click", () => this.setTool("eraser"));
-        (_f = document
-            .getElementById("toolFill")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", () => this.setTool("fill"));
+        const toolMap = {
+            toolBrush: "brush",
+            toolRect: "rect",
+            toolEllipse: "ellipse",
+            toolLine: "line",
+            toolEraser: "eraser",
+            toolFill: "fill",
+        };
+        this.buttons = Object.keys(toolMap)
+            .map((id) => document.getElementById(id))
+            .filter((el) => el instanceof HTMLButtonElement);
+        for (const btn of this.buttons) {
+            const tool = toolMap[btn.id];
+            if (!tool)
+                continue;
+            btn.addEventListener("click", () => {
+                this.setTool(tool);
+                this.updateActiveButton(btn);
+            });
+        }
+        const initial = document.getElementById("toolBrush");
+        if (initial instanceof HTMLButtonElement) {
+            this.updateActiveButton(initial);
+        }
+    }
+    updateActiveButton(activeBtn) {
+        this.buttons.forEach((btn) => btn.classList.remove("active-tool"));
+        activeBtn.classList.add("active-tool");
     }
 }
 //# sourceMappingURL=ToolUI.js.map

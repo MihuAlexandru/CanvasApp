@@ -10,7 +10,12 @@
     <div class="top-row">
       <fieldset class="color-picker">
         <legend>Brush color:</legend>
-        <input id="color-picker" type="color" value="#000000" />
+        <input
+          id="color-picker"
+          type="color"
+          value="#000000"
+          aria-label="color-picker"
+        />
         <span id="color-value">#000000</span>
       </fieldset>
       <fieldset class="brush-picker">
@@ -18,27 +23,27 @@
         <div class="brush-picker-radios">
           <label>
             <input type="radio" name="brush-size" value="2" />
-            <span style="transform: scale(0.35)"></span>
+            <span />
             1
           </label>
           <label>
             <input type="radio" name="brush-size" value="4" />
-            <span style="transform: scale(0.55)"></span>
+            <span />
             2
           </label>
           <label>
             <input type="radio" name="brush-size" value="7" checked />
-            <span style="transform: scale(0.75)"></span>
+            <span />
             3
           </label>
           <label>
             <input type="radio" name="brush-size" value="10" />
-            <span style="transform: scale(0.95)"></span>
+            <span />
             4
           </label>
           <label>
             <input type="radio" name="brush-size" value="14" />
-            <span style="transform: scale(1.15)"></span>
+            <span />
             5
           </label>
         </div>

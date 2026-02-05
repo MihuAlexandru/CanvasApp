@@ -87,3 +87,19 @@ canvas {
   color: white;
   border: 2px solid #2c6bb2;
 }
+
+input[value="2"] + span {
+  transform: scale(0.35);
+}
+input[value="4"] + span {
+  transform: scale(0.55);
+}
+input[value="7"] + span {
+  transform: scale(0.75);
+}
+input[value="10"] + span {
+  transform: scale(0.95);
+}
+input[value="14"] + span {
+  transform: scale(1.15);
+}

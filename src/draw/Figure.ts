@@ -14,4 +14,13 @@ export abstract class Figure implements Drawable {
   }
 
   abstract draw(ctx: CanvasRenderingContext2D): void;
+  abstract containsPoint(p: Point): boolean;
+  abstract moveBy(dx: number, dy: number): void;
+  getBounds() {
+    const x = Math.min(this.start.x, this.end.x);
+    const y = Math.min(this.start.y, this.end.y);
+    const w = Math.abs(this.end.x - this.start.x);
+    const h = Math.abs(this.end.y - this.start.y);
+    return { x, y, w, h };
+  }
 }

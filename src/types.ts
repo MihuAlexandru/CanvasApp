@@ -1,6 +1,13 @@
 export type Point = { x: number; y: number };
 
-export type Tool = "brush" | "rect" | "ellipse" | "line" | "eraser" | "fill";
+export type Tool =
+  | "brush"
+  | "rect"
+  | "ellipse"
+  | "line"
+  | "eraser"
+  | "fill"
+  | "select";
 
 export type StrokeMode = "draw" | "erase";
 

@@ -14,6 +14,7 @@ import { ClearUI } from "./ui/ClearUI.js";
 import type { Drawable } from "./draw/Drawable.js";
 import { Stroke } from "./draw/Stroke.js";
 import { FillOperation } from "./draw/FillOperation.js";
+import { getHandleAtPoint } from "./draw/Helpers.js";
 
 export class DrawingApp {
   private canvas: HTMLCanvasElement;
@@ -30,6 +31,11 @@ export class DrawingApp {
   private renderer: CanvasRenderer;
   private input: CanvasInput;
   private infoUI: InfoUI;
+
+  private activeHandle: number | null = null;
+
+  private selected: Drawable | null = null;
+  private dragOffset: Point | null = null;
 
   constructor() {
     const canvasEl = document.getElementById("canvas");
@@ -82,7 +88,7 @@ export class DrawingApp {
   }
 
   private redraw() {
-    this.renderer.render(this.drawables);
+    this.renderer.render(this.drawables, this.selected ?? undefined);
   }
 
   private clearCanvas() {
@@ -97,6 +103,12 @@ export class DrawingApp {
     const g = (bigint >> 8) & 255;
     const b = bigint & 255;
     return [r, g, b, 255];
+  }
+  private isPointInsideBounds(
+    p: Point,
+    b: { x: number; y: number; w: number; h: number },
+  ): boolean {
+    return p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h;
   }
 
   private applyFill(p: Point) {
@@ -115,6 +127,43 @@ export class DrawingApp {
   }
 
   private onDown(p: Point) {
+    if (this.tool === "select") {
+      if (this.selected?.getBounds) {
+        const bounds = this.selected.getBounds();
+
+        // 1. Check resize handles
+        const handle = getHandleAtPoint(p, bounds);
+        if (handle !== null) {
+          this.activeHandle = handle;
+          return;
+        }
+
+        // 2. Click inside bounding box → keep selection
+        if (this.isPointInsideBounds(p, bounds)) {
+          this.dragOffset = p;
+          return;
+        }
+      }
+
+      // 3. Try selecting a new object
+      for (let i = this.drawables.length - 1; i >= 0; i--) {
+        const item = this.drawables[i];
+        if (item?.containsPoint?.(p)) {
+          this.selected = item;
+          this.dragOffset = p;
+          this.redraw();
+          return;
+        }
+      }
+
+      // 4. Clicked outside everything → deselect
+      this.selected = null;
+      this.activeHandle = null;
+      this.dragOffset = null;
+      this.redraw();
+      return;
+    }
+
     if (this.tool === "fill") {
       this.applyFill(p);
       return;
@@ -125,7 +174,11 @@ export class DrawingApp {
       this.currentStroke = new Stroke(this.brushColor, width, mode);
       this.currentStroke.addPoint(p);
       this.drawables.push(this.currentStroke);
-    } else {
+    } else if (
+      this.tool === "rect" ||
+      this.tool === "ellipse" ||
+      this.tool === "line"
+    ) {
       this.currentFigure = this.createFigure(this.tool, p, p);
       this.drawables.push(this.currentFigure);
     }
@@ -134,6 +187,27 @@ export class DrawingApp {
   }
 
   private onMove(p: Point) {
+    if (this.tool === "select" && this.selected && this.activeHandle !== null) {
+      this.resizeSelected(p);
+      this.redraw();
+      return;
+    }
+    if (
+      this.tool === "select" &&
+      this.selected &&
+      this.dragOffset &&
+      this.activeHandle === null
+    ) {
+      const dx = p.x - this.dragOffset.x;
+      const dy = p.y - this.dragOffset.y;
+
+      this.selected.moveBy?.(dx, dy);
+
+      this.dragOffset = p;
+      this.redraw();
+      return;
+    }
+
     if (this.tool === "brush" || this.tool === "eraser") {
       if (!this.currentStroke) return;
       this.currentStroke.addPoint(p);
@@ -145,13 +219,15 @@ export class DrawingApp {
   }
 
   private onUp() {
+    this.activeHandle = null;
+    this.dragOffset = null;
     this.currentStroke = null;
     this.currentFigure = null;
     this.redraw();
   }
 
   private createFigure(
-    tool: Exclude<Tool, "brush" | "eraser" | "fill">,
+    tool: Exclude<Tool, "brush" | "eraser" | "fill" | "select">,
     start: Point,
     end: Point,
   ): Figure {
@@ -165,6 +241,38 @@ export class DrawingApp {
       default: {
         const _never: never = tool;
         throw new Error(`Unknown tool: ${_never}`);
+      }
+    }
+  }
+
+  private isFigure(obj: Drawable): obj is Figure {
+    return obj instanceof Figure;
+  }
+  private resizeSelected(p: Point) {
+    const sel = this.selected;
+    if (!sel) return;
+
+    if (sel instanceof Stroke) {
+      sel.resizeByHandle(this.activeHandle!, p);
+      return;
+    }
+
+    if (this.isFigure(sel)) {
+      switch (this.activeHandle) {
+        case 0:
+          sel.start = p;
+          break;
+        case 1:
+          sel.start.y = p.y;
+          sel.end.x = p.x;
+          break;
+        case 2:
+          sel.start.x = p.x;
+          sel.end.y = p.y;
+          break;
+        case 3:
+          sel.end = p;
+          break;
       }
     }
   }

@@ -16,6 +16,7 @@ export class ToolUI {
       toolLine: "line",
       toolEraser: "eraser",
       toolFill: "fill",
+      toolSelect: "select",
     };
 
     this.buttons = Object.keys(toolMap)

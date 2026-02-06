@@ -130,22 +130,19 @@ export class DrawingApp {
     if (this.tool === "select") {
       if (this.selected?.getBounds) {
         const bounds = this.selected.getBounds();
-
-        // 1. Check resize handles
         const handle = getHandleAtPoint(p, bounds);
+
         if (handle !== null) {
           this.activeHandle = handle;
           return;
         }
 
-        // 2. Click inside bounding box → keep selection
         if (this.isPointInsideBounds(p, bounds)) {
           this.dragOffset = p;
           return;
         }
       }
 
-      // 3. Try selecting a new object
       for (let i = this.drawables.length - 1; i >= 0; i--) {
         const item = this.drawables[i];
         if (item?.containsPoint?.(p)) {
@@ -156,7 +153,6 @@ export class DrawingApp {
         }
       }
 
-      // 4. Clicked outside everything → deselect
       this.selected = null;
       this.activeHandle = null;
       this.dragOffset = null;

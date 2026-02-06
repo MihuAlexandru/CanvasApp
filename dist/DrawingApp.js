@@ -14,13 +14,13 @@ import { getHandleAtPoint } from "./draw/Helpers.js";
 export class DrawingApp {
     constructor() {
         this.tool = "brush";
-        this.drawables = [];
         this.currentStroke = null;
         this.currentFigure = null;
         this.brushColor = "#000000";
         this.brushWidth = 3;
-        this.activeHandle = null;
+        this.drawables = [];
         this.selected = null;
+        this.activeHandle = null;
         this.dragOffset = null;
         const canvasEl = document.getElementById("canvas");
         if (!(canvasEl instanceof HTMLCanvasElement))
@@ -45,6 +45,15 @@ export class DrawingApp {
         new ClearUI(() => this.clearCanvas()).init();
         this.infoUI = new InfoUI("#legenda .ui-info", this.canvas);
         this.redraw();
+    }
+    isSelectable(x) {
+        return typeof (x === null || x === void 0 ? void 0 : x.containsPoint) === "function";
+    }
+    isBounded(x) {
+        return typeof (x === null || x === void 0 ? void 0 : x.getBounds) === "function";
+    }
+    isMovable(x) {
+        return typeof (x === null || x === void 0 ? void 0 : x.moveBy) === "function";
     }
     setBrushColor(color) {
         this.brushColor = color;
@@ -84,33 +93,28 @@ export class DrawingApp {
         }
     }
     onDown(p) {
-        var _a, _b;
         if (this.tool === "select") {
-            if ((_a = this.selected) === null || _a === void 0 ? void 0 : _a.getBounds) {
+            if (this.isBounded(this.selected)) {
                 const bounds = this.selected.getBounds();
-                // 1. Check resize handles
                 const handle = getHandleAtPoint(p, bounds);
                 if (handle !== null) {
                     this.activeHandle = handle;
                     return;
                 }
-                // 2. Click inside bounding box → keep selection
                 if (this.isPointInsideBounds(p, bounds)) {
                     this.dragOffset = p;
                     return;
                 }
             }
-            // 3. Try selecting a new object
             for (let i = this.drawables.length - 1; i >= 0; i--) {
                 const item = this.drawables[i];
-                if ((_b = item === null || item === void 0 ? void 0 : item.containsPoint) === null || _b === void 0 ? void 0 : _b.call(item, p)) {
+                if (this.isSelectable(item) && item.containsPoint(p)) {
                     this.selected = item;
                     this.dragOffset = p;
                     this.redraw();
                     return;
                 }
             }
-            // 4. Clicked outside everything → deselect
             this.selected = null;
             this.activeHandle = null;
             this.dragOffset = null;
@@ -137,7 +141,6 @@ export class DrawingApp {
         this.redraw();
     }
     onMove(p) {
-        var _a, _b;
         if (this.tool === "select" && this.selected && this.activeHandle !== null) {
             this.resizeSelected(p);
             this.redraw();
@@ -149,7 +152,9 @@ export class DrawingApp {
             this.activeHandle === null) {
             const dx = p.x - this.dragOffset.x;
             const dy = p.y - this.dragOffset.y;
-            (_b = (_a = this.selected).moveBy) === null || _b === void 0 ? void 0 : _b.call(_a, dx, dy);
+            if (this.isMovable(this.selected)) {
+                this.selected.moveBy(dx, dy);
+            }
             this.dragOffset = p;
             this.redraw();
             return;

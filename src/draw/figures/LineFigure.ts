@@ -1,4 +1,4 @@
-import { Point } from "../../types.js";
+import { Point } from "../../utils/types.js";
 import { distancePointToSegment } from "../Helpers.js";
 import { Figure } from "../Figure.js";
 

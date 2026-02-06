@@ -1,4 +1,5 @@
-import type { Drawable } from "../draw/Drawable.js";
+import type { Drawable, Bounded } from "../utils/Interfaces.js";
+import { Bounds } from "../utils/types.js";
 
 export class CanvasRenderer {
   constructor(
@@ -6,7 +7,11 @@ export class CanvasRenderer {
     private ctx: CanvasRenderingContext2D,
   ) {}
 
-  private drawResizeHandles(b: { x: number; y: number; w: number; h: number }) {
+  private isBounded(x: unknown): x is Bounded {
+    return typeof (x as any)?.getBounds === "function";
+  }
+
+  private drawResizeHandles(b: Bounds) {
     const size = 8;
     const half = size / 2;
 
@@ -46,7 +51,7 @@ export class CanvasRenderer {
     for (const item of items) {
       item.draw(this.ctx);
     }
-    if (selected && selected.getBounds) {
+    if (selected && this.isBounded(selected)) {
       this.drawBoundingBox(selected.getBounds());
     }
   }

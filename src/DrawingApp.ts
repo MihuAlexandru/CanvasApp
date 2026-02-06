@@ -1,5 +1,3 @@
-import type { Tool, Point } from "./types.js";
-
 import { InfoUI } from "./ui/InfoUI.js";
 import { Figure } from "./draw/Figure.js";
 import { EllipseFigure } from "./draw/figures/EllipseFigure.js";
@@ -10,18 +8,22 @@ import { CanvasInput } from "./canvas/CanvasInput.js";
 import { BrushUI } from "./ui/BrushUI.js";
 import { ToolUI } from "./ui/ToolUI.js";
 import { ClearUI } from "./ui/ClearUI.js";
-
-import type { Drawable } from "./draw/Drawable.js";
+import type {
+  Bounded,
+  Drawable,
+  Movable,
+  Selectable,
+} from "./utils/Interfaces.js";
 import { Stroke } from "./draw/Stroke.js";
 import { FillOperation } from "./draw/FillOperation.js";
 import { getHandleAtPoint } from "./draw/Helpers.js";
+import { Bounds, Point, SceneItem, Tool } from "./utils/types.js";
 
 export class DrawingApp {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
   private tool: Tool = "brush";
-  private drawables: Drawable[] = [];
   private currentStroke: Stroke | null = null;
   private currentFigure: Figure | null = null;
 
@@ -32,9 +34,11 @@ export class DrawingApp {
   private input: CanvasInput;
   private infoUI: InfoUI;
 
+  private drawables: SceneItem[] = [];
+  private selected: SceneItem | null = null;
+
   private activeHandle: number | null = null;
 
-  private selected: Drawable | null = null;
   private dragOffset: Point | null = null;
 
   constructor() {
@@ -76,6 +80,18 @@ export class DrawingApp {
     this.redraw();
   }
 
+  private isSelectable(x: unknown): x is Selectable {
+    return typeof (x as any)?.containsPoint === "function";
+  }
+
+  private isBounded(x: unknown): x is Bounded {
+    return typeof (x as any)?.getBounds === "function";
+  }
+
+  private isMovable(x: unknown): x is Movable {
+    return typeof (x as any)?.moveBy === "function";
+  }
+
   private setBrushColor(color: string) {
     this.brushColor = color;
     this.ctx.strokeStyle = color;
@@ -104,10 +120,7 @@ export class DrawingApp {
     const b = bigint & 255;
     return [r, g, b, 255];
   }
-  private isPointInsideBounds(
-    p: Point,
-    b: { x: number; y: number; w: number; h: number },
-  ): boolean {
+  private isPointInsideBounds(p: Point, b: Bounds): boolean {
     return p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h;
   }
 
@@ -128,7 +141,7 @@ export class DrawingApp {
 
   private onDown(p: Point) {
     if (this.tool === "select") {
-      if (this.selected?.getBounds) {
+      if (this.isBounded(this.selected)) {
         const bounds = this.selected.getBounds();
         const handle = getHandleAtPoint(p, bounds);
 
@@ -144,8 +157,8 @@ export class DrawingApp {
       }
 
       for (let i = this.drawables.length - 1; i >= 0; i--) {
-        const item = this.drawables[i];
-        if (item?.containsPoint?.(p)) {
+        const item = this.drawables[i]!;
+        if (this.isSelectable(item) && item.containsPoint(p)) {
           this.selected = item;
           this.dragOffset = p;
           this.redraw();
@@ -197,7 +210,9 @@ export class DrawingApp {
       const dx = p.x - this.dragOffset.x;
       const dy = p.y - this.dragOffset.y;
 
-      this.selected.moveBy?.(dx, dy);
+      if (this.isMovable(this.selected)) {
+        this.selected.moveBy(dx, dy);
+      }
 
       this.dragOffset = p;
       this.redraw();

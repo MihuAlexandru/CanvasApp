@@ -1,8 +1,13 @@
-import type { Point, StrokeMode } from "../types.js";
+import type { Point, StrokeMode } from "../utils/types.js";
 import { distancePointToSegment } from "./Helpers.js";
-import type { Drawable } from "./Drawable.js";
+import type {
+  Bounded,
+  Drawable,
+  Movable,
+  Selectable,
+} from "../utils/Interfaces.js";
 
-export class Stroke implements Drawable {
+export class Stroke implements Drawable, Selectable, Bounded, Movable {
   public points: Point[] = [];
 
   constructor(
@@ -40,6 +45,7 @@ export class Stroke implements Drawable {
     ctx.stroke();
     ctx.restore();
   }
+
   containsPoint(p: Point): boolean {
     for (let i = 1; i < this.points.length; i++) {
       const a = this.points[i - 1]!;
@@ -57,6 +63,7 @@ export class Stroke implements Drawable {
       pt.y += dy;
     }
   }
+
   resizeByHandle(handle: number, p: Point) {
     const b = this.getBounds();
     const oldX = b.x;

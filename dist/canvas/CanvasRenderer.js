@@ -3,6 +3,9 @@ export class CanvasRenderer {
         this.canvas = canvas;
         this.ctx = ctx;
     }
+    isBounded(x) {
+        return typeof (x === null || x === void 0 ? void 0 : x.getBounds) === "function";
+    }
     drawResizeHandles(b) {
         const size = 8;
         const half = size / 2;
@@ -33,7 +36,7 @@ export class CanvasRenderer {
         for (const item of items) {
             item.draw(this.ctx);
         }
-        if (selected && selected.getBounds) {
+        if (selected && this.isBounded(selected)) {
             this.drawBoundingBox(selected.getBounds());
         }
     }

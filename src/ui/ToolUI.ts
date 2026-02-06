@@ -1,4 +1,4 @@
-import type { Tool } from "../types.js";
+import type { Tool } from "../utils/types.js";
 
 export class ToolUI {
   private buttons: HTMLButtonElement[] = [];

@@ -1,3 +1,5 @@
+import { Bounded, Drawable, Movable, Selectable } from "./Interfaces";
+
 export type Point = { x: number; y: number };
 
 export type Tool =
@@ -16,3 +18,7 @@ export type Handlers = {
   onMove(p: Point, e: PointerEvent): void;
   onUp(e: PointerEvent): void;
 };
+
+export type Bounds = { x: number; y: number; w: number; h: number };
+
+export type SceneItem = Drawable & Partial<Selectable & Movable & Bounded>;

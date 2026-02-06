@@ -1,4 +1,4 @@
-import type { Point, Handlers } from "../types.js";
+import type { Point, Handlers } from "../utils/types.js";
 
 export class CanvasInput {
   constructor(

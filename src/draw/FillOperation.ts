@@ -1,4 +1,4 @@
-import type { Drawable } from "./Drawable.js";
+import type { Drawable } from "../utils/Interfaces.js";
 
 export class FillOperation implements Drawable {
   constructor(

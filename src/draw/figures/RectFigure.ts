@@ -1,4 +1,4 @@
-import { Point } from "../../types.js";
+import { Point } from "../../utils/types.js";
 import { Figure } from "../Figure.js";
 
 export class RectFigure extends Figure {
@@ -16,6 +16,7 @@ export class RectFigure extends Figure {
     ctx.stroke();
     ctx.restore();
   }
+
   containsPoint(p: Point): boolean {
     const x = Math.min(this.start.x, this.end.x);
     const y = Math.min(this.start.y, this.end.y);

@@ -1,4 +1,4 @@
-import { Point } from "../types";
+import { Bounds, Point } from "../utils/types";
 
 export function distancePointToSegment(p: Point, a: Point, b: Point): number {
   const A = p.x - a.x;
@@ -25,10 +25,7 @@ export function distancePointToSegment(p: Point, a: Point, b: Point): number {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-export function getHandleAtPoint(
-  p: Point,
-  b: { x: number; y: number; w: number; h: number },
-): number | null {
+export function getHandleAtPoint(p: Point, b: Bounds): number | null {
   const size = 8;
   const half = size / 2;
 

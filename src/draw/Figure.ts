@@ -1,7 +1,14 @@
-import { Point } from "../types";
-import type { Drawable } from "./Drawable.js";
+import type {
+  Bounded,
+  Drawable,
+  Movable,
+  Selectable,
+} from "../utils/Interfaces.js";
+import { Point } from "../utils/types.js";
 
-export abstract class Figure implements Drawable {
+export abstract class Figure
+  implements Drawable, Selectable, Resizable, Bounded, Movable
+{
   constructor(
     public color: string,
     public width: number,
@@ -23,4 +30,10 @@ export abstract class Figure implements Drawable {
     const h = Math.abs(this.end.y - this.start.y);
     return { x, y, w, h };
   }
+}
+
+export interface Resizable {
+  start: Point;
+  end: Point;
+  updateEnd(p: Point): void;
 }

@@ -1,4 +1,4 @@
-import { Point } from "../../types.js";
+import { Point } from "../../utils/types.js";
 import { Figure } from "../Figure.js";
 
 export class EllipseFigure extends Figure {
